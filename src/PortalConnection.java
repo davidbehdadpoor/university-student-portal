@@ -1,3 +1,4 @@
+package src;
 
 import java.sql.*; // JDBC stuff.
 import java.util.Properties;
