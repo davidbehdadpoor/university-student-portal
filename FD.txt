@@ -1,0 +1,81 @@
+
+Domain:
+D(studentIdnr, studentName, login, branchName, programName, programAbbreviation, 
+ courseCode, courseName, credits, departmentName, departmentAbbreviation, capacity, 
+ classification, grade, position)
+
+-- a) Functional dependencies --
+
+studentIdnr → studentName
+studentIdnr → login
+studentIdnr → programName
+studentIdnr → branchName
+studentIdnr, courseCode → grade
+studentIdnr, courseCode → position
+
+departmentName → departmentAbbreviation
+departmentAbbreviation → departmentName
+
+programName → programAbbreviation
+
+courseCode → courseName
+courseCode → credits
+courseCode → departmentName
+courseCode → capacity
+courseCode, position → studentIdnr
+
+login → studentIdnr
+
+-- b) BCNF schema --
+
+We choose studentIdnr → studentName, login, programName, branchName
+Since X⁺ ≠ the entire schema, this violates BCNF.
+
+We extract the violated FD as its own relation:
+
+R₁(studentIdnr, studentName, login, programName, branchName) (in BCNF!)
+Remainder:
+R₂(studentIdnr, courseCode, courseName, credits, departmentName, departmentAbbreviation, capacity, classification, grade, position)
+ 
+Then we choose courseCode → courseName, credits, departmentName, capacity
+X = {courseCode}, X⁺ = {courseCode, courseName, credits, departmentName, capacity}
+Since X⁺ ≠ the entire relation, this violates BCNF.
+R₃(courseCode, courseName, credits, departmentName, capacity) (in BCNF!)
+
+Remainder:
+R₄(studentIdnr, courseCode, departmentAbbreviation, classification, grade, position)
+X = {departmentName}, X⁺ = {departmentName, departmentAbbreviation}
+R₅(departmentName, departmentAbbreviation)
+
+Remainder:
+R₆(studentIdnr, courseCode, classification, grade, position)
+
+X = {programName}, X⁺ = {programName, programAbbreviation}
+R₇(programName, programAbbreviation)
+
+Remainder:
+R₈(studentIdnr, courseCode, classification, grade, position)
+
+Final Result:
+Students(_studentIdnr_, studentName, login, programName, branchName)
+Courses(_courseCode_, courseName, credits, departmentName, capacity)
+Departments(_departmentName_, departmentAbbreviation)
+Programs(_programName_, programAbbreviation)
+Enrollments(_studentIdnr_, _courseCode_, _position_, grade)
+
+-- c) 4NF additions --
+MVD identified: courseCode ->> classification
+X = {courseCode}, X⁺ = {courseCode, classification}
+Since classification is independent of the other attributes, this violates 4NF.
+
+Extract:
+R₉(courseCode, classification)
+
+Final remainder relation:
+R₁₀(studentIdnr, courseCode, grade, position)
+
+
+FROM b) AFTER 4NF NORMALIZATION CourseClassifications(_courseCode_, _classification_)
+
+
+
