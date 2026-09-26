@@ -1,0 +1,34 @@
+# Compiled Java files and build output
+*.class
+/build/
+/bin/
+/out/
+/target/
+
+# Downloaded dependencies
+*.jar
+/lib/
+
+# Local environment variables and credentials
+.env
+.env.*
+!.env.example
+*.local.properties
+
+# Editor and IDE settings
+.vscode/
+.idea/
+*.iml
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Local settings, captured output and logs
+defaultSettings.json
+output.txt
+*.log
